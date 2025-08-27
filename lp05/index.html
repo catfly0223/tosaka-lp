@@ -16,7 +16,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/normalize.css">
 <link rel="stylesheet" href="css/style.css">
+
+<!-- LP05 CR別LINE URL設定 -->
+<script src="config.js"></script>
+
 <script>
+  // スクロール時のフローティングエリア表示制御
   window.addEventListener("scroll", function () {
     const elm = document.querySelector(".floating_area");
     const scroll = window.pageYOffset;
@@ -28,6 +33,27 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       elm.style.opacity = "0";
       elm.style.zIndex = "-1";
       // console.log(scroll);
+    }
+  });
+
+  // 動的LINE URL切り替え機能
+  document.addEventListener('DOMContentLoaded', function() {
+    // 現在のCR番号を取得
+    const crNumber = LP_CONFIG.getCurrentCrNumber();
+    const currentLineUrl = LP_CONFIG.getCurrentLineUrl();
+    
+    // デバッグ用（本番では削除可能）
+    console.log('LP05 - CR番号:', crNumber, 'LINE URL:', currentLineUrl);
+    
+    // 全てのLINEリンクを動的に更新
+    const lineLinks = document.querySelectorAll('a[href*="autosns.app"]');
+    lineLinks.forEach(function(link) {
+      link.href = currentLineUrl;
+    });
+    
+    // ページタイトルにCR番号を追加（SEO・追跡用）
+    if (crNumber > 1) {
+      document.title = document.title + ' - CR' + String(crNumber).padStart(2, '0');
     }
   });
 </script>

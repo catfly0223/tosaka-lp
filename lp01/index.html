@@ -14,9 +14,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/normalize.css">
 <link rel="stylesheet" href="css/style.css">
+
+<!-- 共通 CR別LINE URL設定 -->
+<script src="../config.js"></script>
+
 <script>
+  // スクロール時のフローティングエリア表示制御
   window.addEventListener("scroll", function () {
     const elm = document.querySelector(".floating_area");
     const scroll = window.pageYOffset;
@@ -29,6 +33,28 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       elm.style.zIndex = "-1";
       // console.log(scroll);
     }
+  });
+
+  // CRパラメータ制御機能（ex-pa.jpリンクはそのまま、サンクスページ用）
+  document.addEventListener('DOMContentLoaded', function() {
+    // 現在のCR番号を取得
+    const crNumber = LP_UTILS.getCurrentCrNumber();
+    
+    // デバッグ用（本番では削除可能）
+    console.log('LP01 - CR番号:', crNumber, '(ex-pa.jpリンクはそのまま)');
+    
+    // ページタイトルにCR番号を追加（SEO・追跡用）
+    if (crNumber > 1) {
+      document.title = document.title + ' - CR' + String(crNumber).padStart(2, '0');
+    }
+    
+    // サンクスページリンクにCRパラメータを追加
+    const thanksLinks = document.querySelectorAll('a[href*="thanks/lp01"]');
+    thanksLinks.forEach(function(link) {
+      const url = new URL(link.href, window.location.origin);
+      url.searchParams.set('cr', String(crNumber).padStart(2, '0'));
+      link.href = url.toString();
+    });
   });
 </script>
 <title>“生きてるだけで追われる”魔法の恋愛術</title>
